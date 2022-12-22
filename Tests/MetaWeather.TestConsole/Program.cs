@@ -20,11 +20,14 @@ namespace MetaWeather.TestConsole
         // Create host builder
         public static IHostBuilder CreateHostBuilder(string[] args) => Host
             .CreateDefaultBuilder(args)
+            //.ConfigureAppConfiguration(cnfg => cnfg.)
             .ConfigureServices(ConfigureServices);
 
         // Create services
         private static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
         {
+            services.AddHttpClient<MetaWeatherClient>(client => 
+                client.BaseAddress = new Uri(host.Configuration["MetaWeather"]));
         }
 
         #endregion IHost
@@ -33,6 +36,9 @@ namespace MetaWeather.TestConsole
         {
             using var host = Hosting;
             await host.StartAsync();
+
+            var weather = Services.GetRequiredService<MetaWeatherClient>();
+            var location = await weather.GetLocationByName("Yekaterinburg");
 
             Console.WriteLine("Completed!");
             Console.Read();

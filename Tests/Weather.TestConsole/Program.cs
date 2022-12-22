@@ -24,7 +24,7 @@ namespace Weather.TestConsole
 
         // Create services
         private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
-            .AddHttpClient<WeatherClient>(client => client.BaseAddress = new Uri(host.Configuration["Weather"]));
+            .AddHttpClient<WeatherClient>(client => client.BaseAddress = new Uri(host.Configuration["OpenWeather"]));
 
         #endregion IHost
 

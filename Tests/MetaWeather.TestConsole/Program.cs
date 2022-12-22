@@ -36,7 +36,6 @@ namespace MetaWeather.TestConsole
 
             Console.WriteLine("Completed!");
             Console.Read();
-
             await host.StopAsync();
         }
     }

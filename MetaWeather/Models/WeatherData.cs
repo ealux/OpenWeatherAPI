@@ -1,16 +1,12 @@
-﻿using System;
-using System.Text.Json.Serialization;
-using WeatherAPI.Converters;
+﻿using System.Text.Json.Serialization;
 
-namespace MetaWeather.Models
+namespace Weather.Models
 {
     public class WeatherData
     {
         [JsonPropertyName("cnt")] public int Count { get; set; }
         [JsonPropertyName("list")] public Data[] Data { get; set; }
         [JsonPropertyName("city")] public City City { get; set; }
-
-        
     }
 
     public class City
@@ -36,7 +32,7 @@ namespace MetaWeather.Models
         /// <summary> Time of data forecasted, unix, UTC </summary>
         [JsonPropertyName("dt")] public int Timestamp { get; set; }
 
-        [JsonPropertyName("main")] public Main main { get; set; }
+        [JsonPropertyName("main")] public Weather Weather { get; set; }
 
         [JsonPropertyName("clouds")] public Clouds Clouds { get; set; }
         [JsonPropertyName("wind")] public Wind Wind { get; set; }
@@ -45,13 +41,14 @@ namespace MetaWeather.Models
         [JsonPropertyName("visibility")] public int Visibility { get; set; }
 
         /// <summary> Probability of precipitation.
-        /// The values of the parameter vary between 0 and 1, where 0 is equal to 0%, 1 is equal to 100% 
+        /// The values of the parameter vary between 0 and 1, where 0 is equal to 0%, 1 is equal to 100%
         /// </summary>
         [JsonPropertyName("pop")] public double Precipitation { get; set; }
+
         [JsonPropertyName("dt_txt")] public string Timestamp_string { get; set; }
     }
 
-    public class Main
+    public class Weather
     {
         [JsonPropertyName("temp")] public double CurrentTemp { get; set; }
         [JsonPropertyName("feels_like")] public double FeelsLikeTemp { get; set; }

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9038EE1C-0F49-4BAD-A885-818BC9FF28FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaWeather.TestConsole", "Tests\MetaWeather.TestConsole\MetaWeather.TestConsole.csproj", "{61A0C618-975F-44AD-BF72-E6E5329F70BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weather.TestConsole", "Tests\MetaWeather.TestConsole\Weather.TestConsole.csproj", "{61A0C618-975F-44AD-BF72-E6E5329F70BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherAPI", "MetaWeather\WeatherAPI.csproj", "{3317A3F4-2640-4DC1-866C-15CCA4FEA287}"
 EndProject

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
 
-namespace MetaWeather.TestConsole
+namespace Weather.TestConsole
 {
     internal class Program
     {
@@ -24,7 +24,7 @@ namespace MetaWeather.TestConsole
 
         // Create services
         private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
-            .AddHttpClient<WeatherClient>(client => client.BaseAddress = new Uri(host.Configuration["MetaWeather"]));
+            .AddHttpClient<WeatherClient>(client => client.BaseAddress = new Uri(host.Configuration["Weather"]));
 
         #endregion IHost
 

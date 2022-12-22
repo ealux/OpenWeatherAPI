@@ -1,4 +1,4 @@
-﻿using MetaWeather.Models;
+﻿using Weather.Models;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MetaWeather
+namespace Weather
 {
     public class WeatherClient
     {

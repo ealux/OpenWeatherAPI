@@ -20,15 +20,11 @@ namespace MetaWeather.TestConsole
         // Create host builder
         public static IHostBuilder CreateHostBuilder(string[] args) => Host
             .CreateDefaultBuilder(args)
-            //.ConfigureAppConfiguration(cnfg => cnfg.)
             .ConfigureServices(ConfigureServices);
 
         // Create services
-        private static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
-        {
-            services.AddHttpClient<MetaWeatherClient>(client => 
-                client.BaseAddress = new Uri(host.Configuration["MetaWeather"]));
-        }
+        private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
+            .AddHttpClient<MetaWeatherClient>(client => client.BaseAddress = new Uri(host.Configuration["MetaWeather"]));
 
         #endregion IHost
 

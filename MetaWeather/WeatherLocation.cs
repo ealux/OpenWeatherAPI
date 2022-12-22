@@ -25,17 +25,4 @@ namespace MetaWeather
         [JsonPropertyName("local_names")]
         public Dictionary<string, string> LocalNames { get; set; }
     }
-
-    //internal class JsonLocalNamesConverter : JsonConverter<LocalNames[]>
-    //{
-    //    public override LocalNames[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    //    {
-    //        var dict = 
-    //    }
-
-    //    public override void Write(Utf8JsonWriter writer, LocalNames[] value, JsonSerializerOptions options)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 }

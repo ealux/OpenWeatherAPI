@@ -37,14 +37,14 @@ namespace Weather.TestConsole
             var weather = Services.GetRequiredService<WeatherClient>();
 
             // Location
-            var ekb = await weather.GetLocation("Paris");
+            var ekb = await weather.GetLocation("Moscow");
 
             // Forecast
-            var info = await weather.GetLocationForecastData((ekb[0].Latitude, ekb[0].Longitude));
-            var info2 = await weather.GetLocationForecastData(ekb[0].Name);
+            var info = await weather.GetForecastData((ekb[0].Latitude, ekb[0].Longitude));
+            var info2 = await weather.GetForecastData(ekb[0].Name);
 
             // Current
-            var current = await weather.GetLocationCurrentData(ekb[0].Name);
+            var current = await weather.GetCurrentData(ekb[0].Name);
 
             Console.WriteLine("Completed!");
             Console.Read();

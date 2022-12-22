@@ -24,17 +24,21 @@ namespace MetaWeather.TestConsole
 
         // Create services
         private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
-            .AddHttpClient<MetaWeatherClient>(client => client.BaseAddress = new Uri(host.Configuration["MetaWeather"]));
+            .AddHttpClient<WeatherClient>(client => client.BaseAddress = new Uri(host.Configuration["MetaWeather"]));
 
         #endregion IHost
 
-        private static async Task Main(string[] args)
+        private static async Task Main()
         {
             using var host = Hosting;
             await host.StartAsync();
 
-            var weather = Services.GetRequiredService<MetaWeatherClient>();
-            var location = await weather.GetLocationByName("Yekaterinburg");
+            var weather = Services.GetRequiredService<WeatherClient>();
+
+            var ekb = await weather.GetLocation("Yekaterinburg");
+
+            var info = await weather.GetLocationData((ekb[0].Latitude, ekb[0].Longitude));
+            var info2 = await weather.GetLocationData(ekb[0].Name);
 
             Console.WriteLine("Completed!");
             Console.Read();

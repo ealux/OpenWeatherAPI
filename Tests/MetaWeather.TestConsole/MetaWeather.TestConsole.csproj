@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MetaWeather\MetaWeather.csproj" />
+    <ProjectReference Include="..\..\MetaWeather\WeatherAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

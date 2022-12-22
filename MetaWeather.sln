@@ -5,17 +5,14 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9038EE1C-0F49-4BAD-A885-818BC9FF28FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaWeather.TestConsole", "Tests\MetaWeather.TestConsole\MetaWeather.TestConsole.csproj", "{61A0C618-975F-44AD-BF72-E6E5329F70BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaWeather.TestConsole", "Tests\MetaWeather.TestConsole\MetaWeather.TestConsole.csproj", "{61A0C618-975F-44AD-BF72-E6E5329F70BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaWeather", "MetaWeather\MetaWeather.csproj", "{3317A3F4-2640-4DC1-866C-15CCA4FEA287}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherAPI", "MetaWeather\WeatherAPI.csproj", "{3317A3F4-2640-4DC1-866C-15CCA4FEA287}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{61A0C618-975F-44AD-BF72-E6E5329F70BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -27,7 +24,13 @@ Global
 		{3317A3F4-2640-4DC1-866C-15CCA4FEA287}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3317A3F4-2640-4DC1-866C-15CCA4FEA287}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{61A0C618-975F-44AD-BF72-E6E5329F70BE} = {9038EE1C-0F49-4BAD-A885-818BC9FF28FF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CEA2827F-F031-4E2E-AB94-6623357AAFFF}
 	EndGlobalSection
 EndGlobal

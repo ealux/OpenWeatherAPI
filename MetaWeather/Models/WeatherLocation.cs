@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace MetaWeather
@@ -11,7 +9,7 @@ namespace MetaWeather
         public string Name { get; set; }
 
         [JsonPropertyName("country")]
-        public string Country { get; set; }
+        public string CountryCode { get; set; }
 
         [JsonPropertyName("state")]
         public string State { get; set; }
@@ -24,5 +22,8 @@ namespace MetaWeather
 
         [JsonPropertyName("local_names")]
         public Dictionary<string, string> LocalNames { get; set; }
+
+        /// <summary> Text interpretation </summary>
+        public override string ToString() => $"{Name} - [{CountryCode}][{State}]: {(Latitude, Longitude)}";
     }
 }

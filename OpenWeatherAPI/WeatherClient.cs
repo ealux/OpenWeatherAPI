@@ -1,5 +1,4 @@
-﻿using Weather.Models;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -7,7 +6,10 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Weather
+using OpenWeatherAPI.Models;
+using OpenWeatherAPI.Converters;
+
+namespace OpenWeatherAPI
 {
     public class WeatherClient
     {
@@ -18,7 +20,10 @@ namespace Weather
         {
             Converters =
             {
-                new JsonStringEnumConverter()
+                new JsonStringEnumConverter(),
+                new JsonInt32ToDateTimeConverter(),
+                new JsonInt64ToDateTimeConverter(),
+                new JsonStringToDateTimeConverter()
             }
         };
 
@@ -26,7 +31,7 @@ namespace Weather
 
         #region [Location]
 
-        /// <summary> Get Location (city) by name </summary>
+        /// <summary> Get Location info (massive) by city name </summary>
         public async Task<WeatherLocation[]> GetLocation(
             string name,
             int limit = 1,
@@ -39,7 +44,7 @@ namespace Weather
                 cancel)
                 .ConfigureAwait(false);
 
-        /// <summary> Get Location (city) by coordinates </summary>
+        /// <summary> Get Location info (massive) by city coordinates </summary>
         public async Task<WeatherLocation[]> GetLocation(
             (double Latitude, double Longitude) location,
             int limit = 1,
@@ -56,13 +61,13 @@ namespace Weather
 
         #endregion [Location]
 
-        #region [Data]
+        #region [Data Forecast]
 
-        /// <summary> Get data by name </summary>
-        public async Task<WeatherData> GetLocationData(
+        /// <summary> Get forecast weather data (on 5 days) by name </summary>
+        public async Task<WeatherForecastData> GetForecastData(
             string name,
             CancellationToken cancel = default) =>
-            await _client.GetFromJsonAsync<WeatherData>(
+            await _client.GetFromJsonAsync<WeatherForecastData>(
                  "/data/2.5/forecast?" +
                 $"q={name}&" +
                  "units=metric&" +
@@ -71,11 +76,11 @@ namespace Weather
                 cancel)
                 .ConfigureAwait(false);
 
-        /// <summary> Get data by location (coordinates) </summary>
-        public async Task<WeatherData> GetLocationData(
+        /// <summary> Get forecast weather data (on 5 days) by location (coordinates) </summary>
+        public async Task<WeatherForecastData> GetForecastData(
             (double Latitude, double Longitude) location,
             CancellationToken cancel = default) =>
-            await _client.GetFromJsonAsync<WeatherData>(
+            await _client.GetFromJsonAsync<WeatherForecastData>(
                  "/data/2.5/forecast?" +
                 $"lat={location.Latitude}&" +
                 $"lon={location.Longitude}&" +
@@ -85,11 +90,92 @@ namespace Weather
                 cancel)
                 .ConfigureAwait(false);
 
-        /// <summary> Get data for <see cref="WeatherLocation"/> </summary>
-        public async Task<WeatherData> GetLocationData(
-            WeatherLocation location,
-            CancellationToken cancel = default) => await GetLocationData(location.Name, cancel);
+        /// <summary> Get forecast weather data (on 5 days) for <see cref="WeatherLocation"/> </summary>
+        public Task<WeatherForecastData> GetForecastData(WeatherLocation location, CancellationToken cancel = default) =>
+            GetForecastData(location.Name, cancel);
 
-        #endregion [Data]
+        #endregion [Data Forecast]
+
+        #region [Data Current]
+
+        /// <summary> Get current weather data by name </summary>
+        public async Task<WeatherCurrentData> GetCurrentData(
+            string name,
+            CancellationToken cancel = default)
+        {
+            var raw_data = await _client.GetFromJsonAsync<WeatherCurrentDataInternal>(
+                 "/data/2.5/weather?" +
+                $"q={name}&" +
+                 "units=metric&" +
+                $"appid={_ApiKey}",
+                __JsonOptions,
+                cancel)
+                .ConfigureAwait(false);
+
+            return await Task.FromResult(new WeatherCurrentData
+            {
+                City = new City
+                {
+                    Country = raw_data.City.Country,
+                    Id = raw_data.City.Id,
+                    Location = raw_data.Location,
+                    Name = raw_data.Name,
+                    Population = raw_data.City.Population,
+                    SunRiseUTC = raw_data.City.SunRiseUTC,
+                    SunSetUTC = raw_data.City.SunSetUTC,
+                    TimezoneFromUTC = raw_data.City.TimezoneFromUTC
+                },
+                Clouds = raw_data.Clouds,
+                TimestampUTC = raw_data.TimestampUTC,
+                Visibility = raw_data.Visibility,
+                Weather = raw_data.Weather,
+                Wind = raw_data.Wind
+            })
+            .ConfigureAwait(false);
+        }
+
+        /// <summary> Get current weather data by location (coordinates) </summary>
+        public async Task<WeatherCurrentData> GetCurrentData(
+            (double Latitude, double Longitude) location,
+            CancellationToken cancel = default)
+        {
+            var raw_data = await _client.GetFromJsonAsync<WeatherCurrentDataInternal>(
+                 "/data/2.5/weather?" +
+                $"lat={location.Latitude}&" +
+                $"lon={location.Longitude}&" +
+                 "units=metric&" +
+                $"appid={_ApiKey}",
+                __JsonOptions,
+                cancel)
+                .ConfigureAwait(false);
+
+            return await Task.FromResult(new WeatherCurrentData
+            {
+                City = new City
+                {
+                    Country = raw_data.City.Country,
+                    Id = raw_data.City.Id,
+                    Location = raw_data.Location,
+                    Name = raw_data.Name,
+                    Population = raw_data.City.Population,
+                    SunRiseUTC = raw_data.City.SunRiseUTC,
+                    SunSetUTC = raw_data.City.SunSetUTC,
+                    TimezoneFromUTC = raw_data.City.TimezoneFromUTC
+                },
+                Clouds = raw_data.Clouds,
+                TimestampUTC = raw_data.TimestampUTC,
+                Visibility = raw_data.Visibility,
+                Weather = raw_data.Weather,
+                Wind = raw_data.Wind
+            })
+            .ConfigureAwait(false);
+        }
+            
+
+        /// <summary> Get current weather data for <see cref="WeatherLocation"/> </summary>
+        public Task<WeatherCurrentData> GetCurrentData(WeatherLocation location, CancellationToken cancel = default) =>
+            GetCurrentData(location.Name, cancel);
+
+        #endregion [Weather]
     }
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenWeatherAPI.TestConsole", "Tests\Weather.TestConsole\OpenWeatherAPI.TestConsole.csproj", "{61A0C618-975F-44AD-BF72-E6E5329F70BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenWeatherAPI.Console", "OpenWeatherAPI.Console\OpenWeatherAPI.Console.csproj", "{61A0C618-975F-44AD-BF72-E6E5329F70BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenWeatherAPI", "OpenWeatherAPI\OpenWeatherAPI.csproj", "{3317A3F4-2640-4DC1-866C-15CCA4FEA287}"
 EndProject

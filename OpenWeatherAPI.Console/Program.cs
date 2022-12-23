@@ -56,7 +56,7 @@ namespace Weather.TestConsole
             var weather = Services.GetRequiredService<OpenWeatherAPIClient>();
 
             // Location
-            var ekb = await weather.GetLocation("Moscow");
+            var ekb = await weather.GetLocation("Yekaterinburg");
 
             // Forecast
             var info = await weather.GetForecastData((ekb[0].Latitude, ekb[0].Longitude));

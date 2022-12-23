@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenWeatherAPI;
+using Polly;
+using Polly.Extensions.Http;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Weather.TestConsole
@@ -25,7 +28,23 @@ namespace Weather.TestConsole
 
         // Create services
         private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
-            .AddHttpClient<WeatherClient>(client => client.BaseAddress = new Uri(host.Configuration["OpenWeather"]));
+            .AddHttpClient<OpenWeatherAPIClient>(client => client.BaseAddress = new Uri(host.Configuration["OpenWeather"]))
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+            .AddPolicyHandler(GetRetryPolicy());
+
+        #region [Http policy]
+
+        private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            var jitter = new Random();
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(5, retry_atempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retry_atempt)) +
+                    TimeSpan.FromMilliseconds(jitter.Next(0, 1000)));
+        }
+
+        #endregion [Http policy]
 
         #endregion IHost
 
@@ -34,7 +53,7 @@ namespace Weather.TestConsole
             using var host = Hosting;
             await host.StartAsync();
 
-            var weather = Services.GetRequiredService<WeatherClient>();
+            var weather = Services.GetRequiredService<OpenWeatherAPIClient>();
 
             // Location
             var ekb = await weather.GetLocation("Moscow");

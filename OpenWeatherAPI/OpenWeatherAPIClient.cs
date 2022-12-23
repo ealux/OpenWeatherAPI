@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 using OpenWeatherAPI.Models;
 using OpenWeatherAPI.Converters;
+using System;
 
 namespace OpenWeatherAPI
 {
-    public class WeatherClient
+    public class OpenWeatherAPIClient
     {
         private const string _ApiKey = "c082f7450a91dda8d92fff5710d75da5";
         private readonly HttpClient _client;
+        private readonly OpenWeatherAPIOptions _options;
 
         private static readonly JsonSerializerOptions __JsonOptions = new JsonSerializerOptions
         {
@@ -27,7 +29,13 @@ namespace OpenWeatherAPI
             }
         };
 
-        public WeatherClient(HttpClient client) => this._client = client;
+        public OpenWeatherAPIClient(HttpClient client) //, OpenWeatherAPIOptions options)
+        {
+            this._client = client;
+            //this._options = options;
+
+            //this._client.BaseAddress = new Uri(OpenWeatherAPIOptions.BaseAdress);
+        }
 
         #region [Location]
 
@@ -61,7 +69,7 @@ namespace OpenWeatherAPI
 
         #endregion [Location]
 
-        #region [Data Forecast]
+        #region [Weather Forecast]
 
         /// <summary> Get forecast weather data (on 5 days) by name </summary>
         public async Task<WeatherForecastData> GetForecastData(
@@ -96,7 +104,7 @@ namespace OpenWeatherAPI
 
         #endregion [Data Forecast]
 
-        #region [Data Current]
+        #region [Weather Current]
 
         /// <summary> Get current weather data by name </summary>
         public async Task<WeatherCurrentData> GetCurrentData(

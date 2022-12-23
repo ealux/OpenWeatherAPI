@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\OpenWeatherAPI.Domain\OpenWeatherAPI.Domain.csproj" />
+    <ProjectReference Include="..\OpenWeatherAPI.Interfaces.Base\OpenWeatherAPI.Interfaces.Base.csproj" />
+  </ItemGroup>
+
+</Project>

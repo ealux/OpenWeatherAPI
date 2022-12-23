@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OpenWeatherAPI.ConsoleUI
+﻿namespace OpenWeatherAPI.ConsoleUI
 {
     internal class Program
     {

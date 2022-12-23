@@ -14,4 +14,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\OpenWeatherAPI.Domain\OpenWeatherAPI.Domain.csproj" />
+    <ProjectReference Include="..\..\Data\OpenWeatherAPI.DAL.SqlServer\OpenWeatherAPI.DAL.SqlServer.csproj" />
+  </ItemGroup>
+
 </Project>

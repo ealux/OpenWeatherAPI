@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.EntityFrameworkCore;
+using OpenWeatherAPI.DAL.Context;
 
 namespace OpenWeatherAPI.WebAPI
 {
@@ -14,6 +16,12 @@ namespace OpenWeatherAPI.WebAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // DB
+            builder.Services.AddDbContext<DataDB>(
+                opt => opt
+                .UseSqlServer(builder.Configuration.GetConnectionString("Data"), o => o.MigrationsAssembly("OpenWeatherAPI.DAL.SqlServer")));
+
 
             builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
                 .AddNegotiate();

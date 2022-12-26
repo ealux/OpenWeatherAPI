@@ -14,6 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\OpenWeatherAPI\OpenWeatherAPI.csproj" />
+      <ProjectReference Include="..\..\Data\OpenWeatherAPI.DAL\OpenWeatherAPI.DAL.csproj" />
       <ProjectReference Include="..\..\Services\OpenWeatherAPI.WebAPIClients\OpenWeatherAPI.WebAPIClients.csproj" />
     </ItemGroup>
 

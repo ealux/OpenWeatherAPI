@@ -32,11 +32,7 @@ namespace OpenWeatherAPI.WebAPI
             services.AddScoped(typeof(INamedRepository<>), typeof(DBNamedRepository<>));    // General init
 
             // Controllers
-            services.AddControllers();
-            services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-                .AddNegotiate();
-
-            services.AddAuthorization(options => options.FallbackPolicy = options.DefaultPolicy);
+            services.AddControllers();            
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataDBInitializer db)
@@ -50,10 +46,10 @@ namespace OpenWeatherAPI.WebAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseStaticFiles();
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+           
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

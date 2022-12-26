@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OpenWeatherAPI.DAL.Entities;
 using OpenWeatherAPI.Interfaces.Base.Repositories;
+using System;
+using System.Threading.Tasks;
 
 namespace OpenWeatherAPI.WebAPI.Controllers
 {
@@ -36,6 +38,14 @@ namespace OpenWeatherAPI.WebAPI.Controllers
             return result.Items.Any() ? Ok(result) : NotFound(result);
         }
 
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById(int id) =>
+            await _repository.GetById(id) is { } item 
+                ? Ok(item) 
+                : NotFound();
+
         #endregion [Get]
 
         #region [Exists]
@@ -45,6 +55,64 @@ namespace OpenWeatherAPI.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(bool))]
         public async Task<IActionResult> ExistsId(int id) => await _repository.ExistsById(id) ? Ok(true) : NotFound(false);
 
+        [HttpGet("exists")]
+        [HttpPost("exists")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Exists(DataSource item) => await _repository.Exists(item) ? Ok(true) : NotFound(false);
+
         #endregion [Exists]
+
+
+        #region [Add]
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<IActionResult> Add(DataSource item)
+        {
+            var result = await _repository.Add(item);
+            return CreatedAtAction(nameof(GetById), new {Id = result.Id });
+        }
+
+        #endregion
+
+
+        #region [Update]
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(DataSource item)
+        {
+            if (await _repository.Update(item) is not { } result)
+                return NotFound(item);
+            return AcceptedAtAction(nameof(GetById), new { id = result.Id });
+        }
+
+        #endregion
+
+        #region [Delete]
+
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(DataSource item)
+        {
+            if (await _repository.Delete(item) is not { } result)
+                return NotFound(item);
+            return Ok(item);
+        }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteById(int id)
+        {
+            if (await _repository.DeleteById(id) is not { } result)
+                return NotFound(id);
+            return Ok(id);
+        }
+
+        #endregion
     }
 }

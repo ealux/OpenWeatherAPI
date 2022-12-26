@@ -1,5 +1,6 @@
 ﻿using OpenWeatherAPI.Interfaces.Base.Entities;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenWeatherAPI.Interfaces.Base.Repositories
@@ -8,31 +9,31 @@ namespace OpenWeatherAPI.Interfaces.Base.Repositories
     {
         #region [Base]
 
-        Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> GetAll(CancellationToken cancel = default);
 
-        Task<T> GetById(int id);
+        Task<T> GetById(int id, CancellationToken cancel = default);
 
-        Task<T> Add(T item);
+        Task<T> Add(T item, CancellationToken cancel = default);
 
-        Task<T> Update(T item);
+        Task<T> Update(T item, CancellationToken cancel = default);
 
-        Task<T> Delete(T item);
+        Task<T> Delete(T item, CancellationToken cancel = default);
 
         #endregion [Base]
 
         #region [Extensions]
 
-        Task<int> GetCount();
+        Task<int> GetCount(CancellationToken cancel = default);
 
-        Task<bool> ExistsById(int id);
+        Task<bool> ExistsById(int id, CancellationToken cancel = default);
 
-        Task<bool> Exists(T item);
+        Task<bool> Exists(T item, CancellationToken cancel = default);
 
-        Task<IEnumerable<T>> Get(int skip, int count);
+        Task<IEnumerable<T>> Get(int skip, int count, CancellationToken cancel = default);
 
-        Task<IPage<T>> GetPage(int pageIndex, int pageSize);
+        Task<IPage<T>> GetPage(int pageIndex, int pageSize, CancellationToken cancel = default);
 
-        Task<T> DeleteById(int id);
+        Task<T> DeleteById(int id, CancellationToken cancel = default);
 
         #endregion [Extensions]
     }

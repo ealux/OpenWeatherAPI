@@ -4,9 +4,9 @@ using OpenWeatherAPI.WebAPI.Controllers.Base;
 
 namespace OpenWeatherAPI.WebAPI.Controllers
 {
-    public class DataSourcesController : EntityController<DataSource>
+    public class DataValueController : EntityController<DataValue>
     {
-        public DataSourcesController(IRepository<DataSource> repository) : base(repository)
+        public DataValueController(IRepository<DataValue> repository) : base(repository)
         {
         }
     }

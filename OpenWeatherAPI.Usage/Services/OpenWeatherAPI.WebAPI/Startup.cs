@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.EntityFrameworkCore;
 using OpenWeatherAPI.DAL.Context;
-using OpenWeatherAPI.DAL.Entities;
 using OpenWeatherAPI.DAL.Repositories;
 using OpenWeatherAPI.Interfaces.Base.Repositories;
 using OpenWeatherAPI.WebAPI.Data;
 
 namespace OpenWeatherAPI.WebAPI
 {
-    public record Startup(IConfiguration configuration)
+    public record Startup(IConfiguration Configuration)
     {
         public void ConfigureServices(IServiceCollection services)
         {
@@ -22,15 +21,18 @@ namespace OpenWeatherAPI.WebAPI
             services.AddDbContext<DataDB>(
                 opt => opt
                 .UseSqlServer(
-                    configuration.GetConnectionString("Data"),
+                    Configuration.GetConnectionString("Data"),
                     o => o.MigrationsAssembly("OpenWeatherAPI.DAL.SqlServer")));
             services.AddTransient<DataDBInitializer>();
 
+            //Repositories
+            //services.AddScoped<IRepository<DataSource>, DBRepository<DataSource>>();
+            //services.AddScoped<IRepository<DataValue>, DBRepository<DataValue>>();
+            services.AddScoped(typeof(IRepository<>), typeof(DBRepository<>));              // General init
+            services.AddScoped(typeof(INamedRepository<>), typeof(DBNamedRepository<>));    // General init
+
             // Controllers
             services.AddControllers();
-
-            //Repositories
-            services.AddTransient<IRepository<DataSource>, DBRepository<DataSource>>();
 
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
                 .AddNegotiate();
@@ -51,7 +53,7 @@ namespace OpenWeatherAPI.WebAPI
 
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseRouting();
 

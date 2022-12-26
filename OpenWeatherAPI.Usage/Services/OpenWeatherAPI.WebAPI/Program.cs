@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.EntityFrameworkCore;
 using OpenWeatherAPI.DAL.Context;
+using OpenWeatherAPI.DAL.Entities;
+using OpenWeatherAPI.DAL.Repositories;
+using OpenWeatherAPI.Interfaces.Base.Repositories;
+using OpenWeatherAPI.WebAPI.Data;
 
 namespace OpenWeatherAPI.WebAPI
 {
@@ -12,7 +16,6 @@ namespace OpenWeatherAPI.WebAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -21,7 +24,11 @@ namespace OpenWeatherAPI.WebAPI
             builder.Services.AddDbContext<DataDB>(
                 opt => opt
                 .UseSqlServer(builder.Configuration.GetConnectionString("Data"), o => o.MigrationsAssembly("OpenWeatherAPI.DAL.SqlServer")));
+            builder.Services.AddTransient<DataDBInitializer>();
 
+            // Controllers
+            builder.Services.AddControllers();
+            builder.Services.AddScoped<IRepository<DataSource>, DBRepository<DataSource>>();
 
             builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
                 .AddNegotiate();
@@ -44,10 +51,15 @@ namespace OpenWeatherAPI.WebAPI
             app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();
+
+            //var context = app.Services.GetRequiredService<DataDB>();
+            //context.Database.EnsureCreated();
+
+            //var db = app.Services.GetRequiredService<DataDBInitializer>();
+            //db.Initialize();
         }
     }
 }

@@ -1,12 +1,9 @@
-﻿using OpenWeatherAPI.DAL.Entities.Base;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using OpenWeatherAPI.DAL.Entities.Base;
 
 namespace OpenWeatherAPI.DAL.Entities
 {
+    [Index(nameof(Name), IsUnique = true)]
     public class DataSource : NamedEntity
     {
         public string Description { get; set; }

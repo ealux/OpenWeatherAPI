@@ -12,7 +12,7 @@ using OpenWeatherAPI.DAL.Context;
 namespace OpenWeatherAPI.DAL.SqlServer.Migrations
 {
     [DbContext(typeof(DataDB))]
-    [Migration("20221225112001_Init")]
+    [Migration("20221226092818_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -37,9 +37,13 @@ namespace OpenWeatherAPI.DAL.SqlServer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Sources");
                 });
@@ -67,6 +71,8 @@ namespace OpenWeatherAPI.DAL.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SourceId");
+
+                    b.HasIndex("Time");
 
                     b.ToTable("Values");
                 });

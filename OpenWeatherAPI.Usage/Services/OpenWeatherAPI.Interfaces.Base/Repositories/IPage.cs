@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenWeatherAPI.Interfaces.Base.Repositories
 {
-    public interface IPage<T>
+    public interface IPage<out T>
     {
         IEnumerable<T> Items { get; }
 

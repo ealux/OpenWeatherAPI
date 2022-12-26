@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OpenWeatherAPI.DAL.Entities;
 using OpenWeatherAPI.Interfaces.Base.Repositories;
-using System;
-using System.Threading.Tasks;
 
 namespace OpenWeatherAPI.WebAPI.Controllers
 {
@@ -39,11 +37,12 @@ namespace OpenWeatherAPI.WebAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [ActionName("Get")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id) =>
-            await _repository.GetById(id) is { } item 
-                ? Ok(item) 
+        public async Task<IActionResult> Get(int id) =>
+            await _repository.GetById(id) is { } item
+                ? Ok(item)
                 : NotFound();
 
         #endregion [Get]
@@ -63,7 +62,6 @@ namespace OpenWeatherAPI.WebAPI.Controllers
 
         #endregion [Exists]
 
-
         #region [Add]
 
         [HttpPost]
@@ -71,11 +69,10 @@ namespace OpenWeatherAPI.WebAPI.Controllers
         public async Task<IActionResult> Add(DataSource item)
         {
             var result = await _repository.Add(item);
-            return CreatedAtAction(nameof(GetById), new {Id = result.Id });
+            return CreatedAtAction(nameof(Get), new { Id = result.Id });
         }
 
-        #endregion
-
+        #endregion [Add]
 
         #region [Update]
 
@@ -86,10 +83,10 @@ namespace OpenWeatherAPI.WebAPI.Controllers
         {
             if (await _repository.Update(item) is not { } result)
                 return NotFound(item);
-            return AcceptedAtAction(nameof(GetById), new { id = result.Id });
+            return AcceptedAtAction(nameof(Get), new { id = result.Id });
         }
 
-        #endregion
+        #endregion [Update]
 
         #region [Delete]
 
@@ -113,6 +110,6 @@ namespace OpenWeatherAPI.WebAPI.Controllers
             return Ok(id);
         }
 
-        #endregion
+        #endregion [Delete]
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OpenWeatherAPI.DAL.Context;
 
@@ -11,9 +12,11 @@ using OpenWeatherAPI.DAL.Context;
 namespace OpenWeatherAPI.DAL.SqlServer.Migrations
 {
     [DbContext(typeof(DataDB))]
-    partial class DataDBModelSnapshot : ModelSnapshot
+    [Migration("20221226100405_DataSourceNameIndex")]
+    partial class DataSourceNameIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

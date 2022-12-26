@@ -18,7 +18,7 @@ namespace OpenWeatherAPI.DAL.SqlServer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,9 +48,20 @@ namespace OpenWeatherAPI.DAL.SqlServer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sources_Name",
+                table: "Sources",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Values_SourceId",
                 table: "Values",
                 column: "SourceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Values_Time",
+                table: "Values",
+                column: "Time");
         }
 
         /// <inheritdoc />

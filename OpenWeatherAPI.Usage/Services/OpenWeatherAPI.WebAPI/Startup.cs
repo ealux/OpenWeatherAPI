@@ -33,7 +33,6 @@ namespace OpenWeatherAPI.WebAPI
 
             // Controllers
             services.AddControllers();
-
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
                 .AddNegotiate();
 
@@ -53,7 +52,7 @@ namespace OpenWeatherAPI.WebAPI
 
             app.UseStaticFiles();
             app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseRouting();
 

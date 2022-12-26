@@ -58,9 +58,9 @@ namespace OpenWeatherAPI.DAL.Repositories
         public async Task<T> DeleteById(int id, CancellationToken cancel = default)
         {
             var item = Set.Local.FirstOrDefault(x => x.Id == id);
-            if (item != null)
+            if (item is null)
             {
-                item = await Set.Select(_ => new T { Id = item.Id })
+                item = await Set.Select(i => new T { Id = i.Id })
                                 .FirstOrDefaultAsync(x => x.Id == id, cancel)
                                 .ConfigureAwait(false);
             }

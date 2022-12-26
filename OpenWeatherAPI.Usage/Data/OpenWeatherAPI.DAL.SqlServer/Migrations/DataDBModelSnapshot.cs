@@ -42,7 +42,7 @@ namespace OpenWeatherAPI.DAL.SqlServer.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Sources");
+                    b.ToTable("Sources", (string)null);
                 });
 
             modelBuilder.Entity("OpenWeatherAPI.DAL.Entities.DataValue", b =>
@@ -71,7 +71,7 @@ namespace OpenWeatherAPI.DAL.SqlServer.Migrations
 
                     b.HasIndex("Time");
 
-                    b.ToTable("Values");
+                    b.ToTable("Values", (string)null);
                 });
 
             modelBuilder.Entity("OpenWeatherAPI.DAL.Entities.DataValue", b =>

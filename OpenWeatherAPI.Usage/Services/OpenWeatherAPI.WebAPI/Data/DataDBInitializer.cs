@@ -14,7 +14,8 @@ namespace OpenWeatherAPI.WebAPI.Data
         {
             _db.Database.Migrate();
 
-            if (_db.Sources.Any()) return;
+            if (_db.Sources.Any())
+                return;
 
             var rnd = new Random();
             for (var i = 1; i <= 10; i++)

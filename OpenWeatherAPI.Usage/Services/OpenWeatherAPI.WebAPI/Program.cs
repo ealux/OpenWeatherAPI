@@ -1,65 +1,15 @@
-using Microsoft.AspNetCore.Authentication.Negotiate;
-using Microsoft.EntityFrameworkCore;
-using OpenWeatherAPI.DAL.Context;
-using OpenWeatherAPI.DAL.Entities;
-using OpenWeatherAPI.DAL.Repositories;
-using OpenWeatherAPI.Interfaces.Base.Repositories;
-using OpenWeatherAPI.WebAPI.Data;
-
 namespace OpenWeatherAPI.WebAPI
 {
-    public class Program
+    public partial class Program
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            // DB
-            builder.Services.AddDbContext<DataDB>(
-                opt => opt
-                .UseSqlServer(builder.Configuration.GetConnectionString("Data"), o => o.MigrationsAssembly("OpenWeatherAPI.DAL.SqlServer")));
-            builder.Services.AddTransient<DataDBInitializer>();
-
-            // Controllers
-            builder.Services.AddControllers();
-            builder.Services.AddScoped<IRepository<DataSource>, DBRepository<DataSource>>();
-
-            builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-                .AddNegotiate();
-
-            builder.Services.AddAuthorization(options =>
-            {
-                // By default, all incoming requests will be authorized according to the default policy.
-                options.FallbackPolicy = options.DefaultPolicy;
-            });
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
-
-            //var context = app.Services.GetRequiredService<DataDB>();
-            //context.Database.EnsureCreated();
-
-            //var db = app.Services.GetRequiredService<DataDBInitializer>();
-            //db.Initialize();
+            var host = CreateHostBuilder(args).Build();
+            host.Run();
         }
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(host => host.UseStartup<Startup>());
     }
 }

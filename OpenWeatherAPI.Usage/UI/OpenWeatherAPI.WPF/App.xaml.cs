@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenWeatherAPI.DAL.Entities;
+using OpenWeatherAPI.Interfaces.Base.Repositories;
+using OpenWeatherAPI.WebAPIClients.Repositories;
 using OpenWeatherAPI.WPF.ViewModels;
 using System;
 using System.Linq;
@@ -34,6 +37,8 @@ namespace OpenWeatherAPI.WPF
         private static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
         {
             services.AddScoped<MainWindowViewModel>();
+            services.AddHttpClient<IRepository<DataSource>, WebRepository<DataSource>>(client =>
+                client.BaseAddress = new Uri($"{host.Configuration["WebApi"]}/api/DataSources/"));
         }
 
         #endregion [Hosting]

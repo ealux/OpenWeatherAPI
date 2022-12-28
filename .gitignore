@@ -361,4 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/OpenWeatherAPI.Usage/UI/OpenWeatherAPI.BlazorUI/wwwroot/lib-blazor
+**/wwwroot/lib
+**/wwwroot/lib-*

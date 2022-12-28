@@ -1,5 +1,40 @@
 ﻿@page "/"
+@using OpenWeatherAPI.Domain.Base;
+@using OpenWeatherAPI.Interfaces.Base.Repositories;
+@inject IRepository<DataSourceInfo> _repository
 
-<h1>
-    Welcome!
-</h1>
+@if (_sources is { } sources)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var src in sources)
+            {
+                <tr>
+                    <td>@src.Id</td>
+                    <td>@src.Name</td>
+                    <td>@src.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="fa-10x">Loading....</p>
+}
+
+@code{
+    private IList<DataSourceInfo> _sources;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _sources = (await _repository.GetAll()).ToList();
+    }
+}

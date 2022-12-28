@@ -19,6 +19,6 @@ builder.Services.AddScoped(_ => new HttpClient
 });
 
 // SourceRepositoryClient
-builder.Services.AddApi<IRepository<DataSourceInfo>, WebRepository<DataSourceInfo>>("/api/SourcesRepository");
+builder.Services.AddApi<IRepository<DataSourceInfo>, WebRepository<DataSourceInfo>>("api/SourcesRepository");
 
 await builder.Build().RunAsync();

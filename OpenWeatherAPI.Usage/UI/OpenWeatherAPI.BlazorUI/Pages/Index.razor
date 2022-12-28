@@ -6,9 +6,22 @@
 <h3>Data:</h3>
 
 <button class="btn btn-primary" @onclick="RefreshDataAsync">Reload Data</button>
-<button class="btn btn-outline-primary" @onclick="RefreshDataAsync">
-    <i class="fa fa-plus-circle"></i>
-</button>
+
+<hr />
+
+<EditForm Model="_createNewSourceModel" OnValidSubmit="OnSourceCreatedAsync">
+    <div class="row">
+        <div class="col-3">
+            <p>Name: </p>
+            <InputText id="new-datasource-name" @bind-Value="_createNewSourceModel.Name" />
+        </div>
+        <div class="col-9">
+            <p>Description: </p>
+            <InputText id="new-datasource-description" @bind-Value="_createNewSourceModel.Description" />
+        </div>
+    </div>
+    <button class="btn btn-outline-primary" type="submit">Add</button>
+</EditForm>
 
 @if (_sources is { } sources)
 {
@@ -29,7 +42,7 @@
                     <td>@src.Name</td>
                     <td>@src.Description</td>
                     <td>
-                        <button class="btn btn-outline-danger" @onclick="async () => await RemoveSource(src)">
+                        <button class="btn btn-outline-danger" @onclick="async () => await RemoveSourceAsync(src)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -44,11 +57,18 @@ else
 }
 
 @code{
+    #region [Fields]
+
     private IList<DataSourceInfo>? _sources;
+    private DataSourceInfo _createNewSourceModel = new();
+
+    #endregion
+
 
     protected override async Task OnInitializedAsync() => await UpdateSourceAsync();
     private async Task RefreshDataAsync() => await UpdateSourceAsync();
 
+    // Update data
     private async Task UpdateSourceAsync()
     {
         Console.WriteLine("Request data...");
@@ -56,12 +76,22 @@ else
         Console.WriteLine("Complete!");
     }
 
-    private async Task RemoveSource(DataSourceInfo source)
+    // Remove
+    private async Task RemoveSourceAsync(DataSourceInfo source)
     {
         if (_sources is not { Count: > 0 } sources) return;
 
         var removed = await _repository.Delete(source);
         if (removed is not null) 
             _sources?.Remove(removed);
+    }
+
+    private async Task OnSourceCreatedAsync()
+    {
+        var created = await _repository.Add(_createNewSourceModel);
+        if (created is null) return;
+
+        _sources?.Add(created);
+        _createNewSourceModel = new();
     }
 }

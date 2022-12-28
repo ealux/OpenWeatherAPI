@@ -16,7 +16,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 
-	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
 
 	  <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\OpenWeatherAPI.Domain\OpenWeatherAPI.Domain.csproj" />
     <ProjectReference Include="..\..\Data\OpenWeatherAPI.DAL.SqlServer\OpenWeatherAPI.DAL.SqlServer.csproj" />
+    <ProjectReference Include="..\..\UI\OpenWeatherAPI.BlazorUI\OpenWeatherAPI.BlazorUI.csproj" />
   </ItemGroup>
 
 </Project>

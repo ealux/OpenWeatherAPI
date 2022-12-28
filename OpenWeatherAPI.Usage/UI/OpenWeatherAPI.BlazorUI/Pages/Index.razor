@@ -15,6 +15,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +25,11 @@
                     <td>@src.Id</td>
                     <td>@src.Name</td>
                     <td>@src.Description</td>
+                    <td>
+                        <button class="btn btn-outline-danger" @onclick="async () => await RemoveSource(src)">
+                            <i class="fa fa-trash"> Delete</i>
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -45,5 +51,11 @@ else
         Console.WriteLine("Request data...");
         _sources = (await _repository.GetAll()).ToList();
         Console.WriteLine("Complete!");
+    }
+
+    private async Task RemoveSource(DataSourceInfo source)
+    {
+        if (_sources is not { Count: > 0 } sources) return;
+        _sources?.Remove(source);
     }
 }

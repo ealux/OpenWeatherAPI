@@ -8,7 +8,7 @@ namespace OpenWeatherAPI.WebAPI.Controllers
 {
     public class SourcesRepositoryController : MappedEntityController<DataSourceInfo, DataSource>
     {
-        public SourcesRepositoryController(IRepository<DataSource> repository, IMapper mapper) 
+        public SourcesRepositoryController(IRepository<DataSource> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }

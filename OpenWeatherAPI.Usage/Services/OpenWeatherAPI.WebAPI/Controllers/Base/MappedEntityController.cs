@@ -1,17 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OpenWeatherAPI.DAL.Entities;
-using OpenWeatherAPI.DAL.Entities.Base;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using OpenWeatherAPI.Interfaces.Base.Entities;
 using OpenWeatherAPI.Interfaces.Base.Repositories;
 
 namespace OpenWeatherAPI.WebAPI.Controllers.Base
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public abstract class EntityController<T> : ControllerBase where T : Entity
+    [ApiController, Route("api/[controller]")]
+    public abstract class MappedEntityController<T, TBase> : ControllerBase
+        where T : IEntity
+        where TBase : IEntity
     {
-        private readonly IRepository<T> _repository;
+        private readonly IRepository<TBase> _repository;
+        private readonly IMapper _mapper;
 
-        protected EntityController(IRepository<T> _repository) => this._repository = _repository;
+        public MappedEntityController(IRepository<TBase> repository, IMapper mapper)
+        {
+            this._repository = repository;
+            this._mapper = mapper;
+        }
 
         #region [Get]
 
@@ -23,12 +29,22 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll() =>
-            Ok(await _repository.GetAll());
+            Ok(GetItem(await _repository.GetAll()));
 
         [HttpGet("items[[{skip:int},{count:int}]]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<T>>> Get(int skip, int count) =>
-            Ok(await _repository.Get(skip, count));
+            Ok(GetItem(await _repository.Get(skip, count)));
+
+        #region PageRecord
+
+        protected record Page(IEnumerable<T> Items, int TotalCount, int PageIndex, int PageSize) : IPage<T>
+        {
+            public int TotalPagesCount => (int)Math.Ceiling((double)TotalCount / PageSize);
+        }
+        protected IPage<T> GetPageItems(IPage<TBase> page) => new Page(GetItem(page.Items), page.TotalCount, page.PageIndex, page.PageSize);
+
+        #endregion PageRecord
 
         [HttpGet("page/{pageIndex:int}/{pageSize:int}")]
         [HttpGet("page[[{pageIndex:int}/{pageSize:int}]]")]
@@ -37,7 +53,9 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         public async Task<ActionResult<IPage<T>>> GetPage(int pageIndex, int pageSize)
         {
             var result = await _repository.GetPage(pageIndex, pageSize);
-            return result.Items.Any() ? Ok(result) : NotFound(result);
+            return result.Items.Any() 
+                    ? Ok(GetPageItems(result)) 
+                    : NotFound();
         }
 
         [HttpGet("{id:int}")]
@@ -46,7 +64,7 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id) =>
             await _repository.GetById(id) is { } item
-                ? Ok(item)
+                ? Ok(GetItem(item))
                 : NotFound();
 
         #endregion [Get]
@@ -63,7 +81,7 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Exists(T item) =>
-            await _repository.Exists(item) ? Ok(true) : NotFound(false);
+            await _repository.Exists(GetBase(item)) ? Ok(true) : NotFound(false);
 
         #endregion [Exists]
 
@@ -73,8 +91,8 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Add(T item)
         {
-            var result = await _repository.Add(item);
-            return CreatedAtAction(nameof(Get), new { Id = result.Id }, result);
+            var result = await _repository.Add(GetBase(item));
+            return CreatedAtAction(nameof(Get), new { Id = result.Id }, GetItem(result));
         }
 
         #endregion [Add]
@@ -86,9 +104,9 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(T item)
         {
-            if (await _repository.Update(item) is not { } result)
+            if (await _repository.Update(GetBase(item)) is not { } result)
                 return NotFound(item);
-            return AcceptedAtAction(nameof(Get), new { id = result.Id }, result);
+            return AcceptedAtAction(nameof(Get), new { id = result.Id }, GetItem(result));
         }
 
         #endregion [Update]
@@ -100,9 +118,9 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(T item)
         {
-            if (await _repository.Delete(item) is not { } result)
+            if (await _repository.Delete(GetBase(item)) is not { } result)
                 return NotFound(item);
-            return Ok(result);
+            return Ok(GetItem(result));
         }
 
         [HttpDelete("{id:int}")]
@@ -112,9 +130,23 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         {
             if (await _repository.DeleteById(id) is not { } result)
                 return NotFound(id);
-            return Ok(result);
+            return Ok(GetItem(result));
         }
 
         #endregion [Delete]
+
+        #region [Utils]
+
+        // single item mapping
+        protected virtual TBase GetBase(T item) => _mapper.Map<TBase>(item);
+
+        protected virtual T GetItem(TBase baseItem) => _mapper.Map<T>(baseItem);
+
+        // enumerable items mapping
+        protected virtual IEnumerable<TBase> GetBase(IEnumerable<T> item) => _mapper.Map<IEnumerable<TBase>>(item);
+
+        protected virtual IEnumerable<T> GetItem(IEnumerable<TBase> baseItem) => _mapper.Map<IEnumerable<T>>(baseItem);
+
+        #endregion [Utils]
     }
 }

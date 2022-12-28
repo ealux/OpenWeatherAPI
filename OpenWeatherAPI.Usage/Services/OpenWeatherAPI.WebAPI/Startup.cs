@@ -12,8 +12,6 @@ namespace OpenWeatherAPI.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             // Add services to the container.
-
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
@@ -31,6 +29,9 @@ namespace OpenWeatherAPI.WebAPI
             services.AddScoped(typeof(IRepository<>), typeof(DBRepository<>));              // General init
             services.AddScoped(typeof(INamedRepository<>), typeof(DBNamedRepository<>));    // General init
 
+            // AutoMapper
+            services.AddAutoMapper(typeof(Startup));
+
             // Controllers
             services.AddControllers();            
         }
@@ -42,12 +43,12 @@ namespace OpenWeatherAPI.WebAPI
             // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
             {
+                app.UseWebAssemblyDebugging();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            //app.UseHttpsRedirection();
-
+            app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
            
             app.UseRouting();
@@ -55,7 +56,7 @@ namespace OpenWeatherAPI.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapFallbackToFile("index.html");
+                endpoints.MapFallbackToFile("index.html"); // Fallback to index.html from BlazorUI if no appropriate controllers
             });
         }
     }

@@ -3,6 +3,10 @@
 @using OpenWeatherAPI.Interfaces.Base.Repositories;
 @inject IRepository<DataSourceInfo> _repository
 
+<h3>Data:</h3>
+
+<button class="btn btn-primary" @onclick="RefreshDataAsync">Reload Data</button>
+
 @if (_sources is { } sources)
 {
     <table class="table">
@@ -27,14 +31,19 @@
 }
 else
 {
-    <p class="fa-10x">Loading....</p>
+    <p class="fa-italic">Loading....</p>
 }
 
 @code{
-    private IList<DataSourceInfo> _sources;
+    private IList<DataSourceInfo>? _sources;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() => await UpdateSourceAsync();
+    private async Task RefreshDataAsync() => await UpdateSourceAsync();
+
+    private async Task UpdateSourceAsync()
     {
+        Console.WriteLine("Request data...");
         _sources = (await _repository.GetAll()).ToList();
+        Console.WriteLine("Complete!");
     }
 }

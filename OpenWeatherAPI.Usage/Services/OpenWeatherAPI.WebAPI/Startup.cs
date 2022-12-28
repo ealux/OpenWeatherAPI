@@ -29,6 +29,9 @@ namespace OpenWeatherAPI.WebAPI
             services.AddScoped(typeof(IRepository<>), typeof(DBRepository<>));              // General init
             services.AddScoped(typeof(INamedRepository<>), typeof(DBNamedRepository<>));    // General init
 
+            // AutoMapper
+            services.AddAutoMapper(typeof(Startup));
+
             // Controllers
             services.AddControllers();            
         }

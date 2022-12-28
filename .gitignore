@@ -364,3 +364,4 @@ FodyWeavers.xsd
 **/wwwroot/lib
 **/wwwroot/lib-*
 **/wwwroot/css
+/OpenWeatherAPI.Usage/UI/OpenWeatherAPI.BlazorUI/wwwroot/css/app.css

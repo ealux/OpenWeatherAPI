@@ -102,7 +102,7 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         {
             if (await _repository.Delete(item) is not { } result)
                 return NotFound(item);
-            return Ok(item);
+            return Ok(result);
         }
 
         [HttpDelete("{id:int}")]
@@ -112,7 +112,7 @@ namespace OpenWeatherAPI.WebAPI.Controllers.Base
         {
             if (await _repository.DeleteById(id) is not { } result)
                 return NotFound(id);
-            return Ok(id);
+            return Ok(result);
         }
 
         #endregion [Delete]
